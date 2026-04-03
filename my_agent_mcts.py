@@ -7,6 +7,5 @@ class RandomAgent(Agent):
         super().__init__(player)
     
     def act(self, state, remaining_time):
-        print("Act from alpha beta")
         actions = list(Game.actions(state))
         return random.choice(actions)
