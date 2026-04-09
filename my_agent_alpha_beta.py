@@ -28,7 +28,7 @@ State.copy(self) -> 'State':
 class AlphaBetaAgent(Agent):
     def __init__(self, player):
         super().__init__(player)
-        self.max_depth = 3
+        self.max_depth = 5
 
     def act(self, state,remaining_time):
         _, best_action = self.max_value(state, self.max_depth, float('-inf'), float('inf'))
@@ -90,8 +90,7 @@ class AlphaBetaAgent(Agent):
         """
         Heuristic evaluation function
         """
-        A1, A2 = 0.40, 0.35
-        B = 0.20
+        A1, A2 = 0.45, 0.35
         C1, C2 = 0.05, 0.05
         D1, D2 = 0.10, 0.20
         E, F = 0.05, 0.05
@@ -103,7 +102,12 @@ class AlphaBetaAgent(Agent):
         opp_win = self.near_win_color(state, opp)
         sym_win = self.near_win_symbol(state)
         
-        win_score = my_win * A1 - opp_win * A2 + sym_win * B
+        if (state.current_player == self.player):
+            my_win += sym_win
+        else:
+            opp_win += sym_win
+            
+        win_score = my_win * A1 - opp_win * A2
         
         # 2. number of remaining pieces [0; 16]
         my_x = state.pieces_x[self.player]
