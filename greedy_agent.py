@@ -1,19 +1,16 @@
 from agent import Agent
 from oxono import Game, State
-
-import time
 import random
 
-class AlphaBetaAgent(Agent):
+class GreedyAgent(Agent):
     def __init__(self, player):
         super().__init__(player)
-        self.max_depth = 5
 
-    def act(self, state,remaining_time):
+    def act(self, state, remaining_time):
         """
-        Choose and return an action for the current turn,
-        following the minimax algorithm with alpha-beta pruning. 
-        If time is running out, return a random legal action.
+        Choose and return an action for the current turn.
+        The greedy agent looks exactly one step ahead and picks the move
+        that maximizes its immediate score.
 
         Parameters
         ----------
@@ -27,147 +24,46 @@ class AlphaBetaAgent(Agent):
         best_action : tuple
             The best action to play in the current state, or a random legal action if time is running out.
         """
+        best_action = None
+        max_score = float('-inf')
+        
+        actions = list(Game.actions(state))
+        if not actions:
+            return None
+                    
+        best_action = random.choice(actions)
+        
         if remaining_time <= 5:
-            return random.choice(list(Game.actions(state)))
-        
-        # best first move when starting as player 0
-        if self.player == 0 and state.pieces_x[0] == 8 and state.pieces_o[0] == 8:
-            return ('O', (3, 2), (4, 2))
-        
-        # early turns get more time, late turns less
-        turns_played = 16 - (state.pieces_x[self.player] + state.pieces_o[self.player]) #number of turns already played by the agent
-        decay = 1.5 
-        nrem = max(17 - turns_played, 1) #number of turns remaining for the agent (36 total places, + 2 totems, 17 per player)
-        time_limit = remaining_time* (1 - decay**(-1))/ (1 - decay**(-nrem))
-        deadline = time.time() + time_limit
-        
-        _, best_action = self.max_value(state, self.max_depth, float('-inf'), float('inf'), deadline)
+            return best_action
 
-        if best_action is None: #time ran out during the search
-            return random.choice(list(Game.actions(state)))
-        
+        for action in actions:
+            # Simulate the move
+            new_state = state.copy()
+            Game.apply(new_state, action)
+            
+            # 1. Immediate Win Check
+            if Game.is_terminal(new_state):
+                utility = Game.utility(new_state, self.player)
+                if utility > 0:
+                    return action # Play the winning move immediately!
+                else:
+                    continue # Ignore moves that make us lose immediately
+
+            # 2. Evaluation for non-terminal states
+            score = self.greedy_evaluation(new_state)
+            
+            if score > max_score:
+                max_score = score
+                best_action = action
+                
         return best_action
-    
-    def max_value(self, state, depth, alpha, beta, deadline):
-        """
-        Max-value function for minimax with alpha-beta pruning.
 
-        Parameters
-        ----------
-        state : State
-            The current game state.
-        depth : int
-            The maximum depth to search.
-        alpha : float
-            The alpha value for alpha-beta pruning.
-        beta : float
-            The beta value for alpha-beta pruning.
-        deadline : float
-            The max time by which the function must return to avoid losing the game to timeout.
-
-        Returns
-        -------
-        max_v, best_action : int, tuple
-            The best action and its value to play in the current state, or a random legal action if time is running out.
+    def greedy_evaluation(self, state):
         """
-        if time.time() >= deadline:
-            return None, None
+        A simplified evaluation function. 
+        A greedy agent only cares about immediate tangible advantages, 
+        mainly setting up its own near-wins and blocking the opponent's.
         
-        if depth == 0 or Game.is_terminal(state):
-            if Game.is_terminal(state):
-                return Game.utility(state, self.player), None
-            else: return self.evaluate(state), None
-            
-        max_v = float('-inf')
-        best_action = None
-        
-        for action in Game.actions(state):
-            if time.time() >= deadline:
-                break
-            
-            new_state = state.copy()
-            Game.apply(new_state, action)
-            
-            v,_ = self.min_value(new_state, depth - 1, alpha, beta, deadline)
-            
-            if v is None: #time ran out during the recursive call
-                break 
-            
-            if v > max_v:
-                max_v = v
-                best_action = action
-            
-            alpha = max(alpha, max_v)
-            if beta <= alpha:
-                break
-        
-        if best_action is None and max_v == float('-inf'):
-            return None, None
-        
-        return max_v, best_action
-    
-    def min_value(self, state, depth, alpha, beta, deadline):
-        """
-        Min-value function for minimax with alpha-beta pruning.
-
-        Parameters
-        ----------
-        state : State
-            The current game state.
-        depth : int
-            The maximum depth to search.
-        alpha : float
-            The alpha value for alpha-beta pruning.
-        beta : float
-            The beta value for alpha-beta pruning.
-        deadline : float
-            The max time by which the function must return to avoid losing the game to timeout.
-
-        Returns
-        -------
-        min_v, best_action : int, tuple
-            The best action and its value to play in the current state, or a random legal action if time is running out.
-        """
-        if time.time() >= deadline:
-            return None, None
-        
-        if depth == 0 or Game.is_terminal(state):
-            if Game.is_terminal(state):
-                return Game.utility(state, self.player), None
-            else: return self.evaluate(state), None
-        
-        min_v = float('inf')
-        best_action = None
-        
-        for action in Game.actions(state):
-            if time.time() >= deadline:
-                break
-            
-            new_state = state.copy()
-            Game.apply(new_state, action)
-            
-            v,_ = self.max_value(new_state, depth - 1, alpha, beta, deadline)
-            
-            if v is None: #time ran out during the recursive call
-                break 
-            
-            if v < min_v:
-                min_v = v
-                best_action = action
-            
-            beta = min(beta, v)
-            if beta <= alpha:
-                break
-        
-        if best_action is None and min_v == float('inf'):
-            return None, None
-        
-        return min_v, best_action
-    
-    def evaluate(self, state):
-        """
-        Heuristic evaluation function for alpha-beta pruning.
-
         Parameters
         ----------
         state : State
@@ -175,55 +71,24 @@ class AlphaBetaAgent(Agent):
 
         Returns
         -------
-        scores sum : int
+        score : int
             The score for the current state.
         """
         opp = 1 - self.player
         
-        # Weights for the different criteria of the evaluation function
-        A1, A2 = 0.45, 0.35 # 1. Winning potential / threats
-        C1, C2 = 0.05, 0.05 # 2.1 big difference in X and 0 pieces
-        D1, D2 = 0.10, 0.20 # 2.2 no pieces of one type
-        E , F  = 0.05, 0.05 # 3. Totem alignment
-        
-        # ———————————
-        # 1. Winning potential / threats [~ <5] - number of near wins (3 in a row with an open spot)
         my_win = self.near_win_color(state, self.player)
         opp_win = self.near_win_color(state, opp)
         
-        sym_win = self.near_win_symbol(state) #if it's the agent's turn, the symbol near wins are an opportunity, otherwise they are a threat
+        sym_win = self.near_win_symbol(state)
         if (state.current_player == self.player):
             my_win += sym_win
         else:
             opp_win += sym_win
+        
+        score = (my_win * 10) - (opp_win * 50) # Heavy penalty for leaving opponent threats
             
-        win_score = my_win * A1 - opp_win * A2
-        
-        # ———————————
-        # 2. number of remaining pieces [0; 16]
-        my_x = state.pieces_x[self.player]
-        my_o = state.pieces_o[self.player]
-        opp_x = state.pieces_x[opp]
-        opp_o = state.pieces_o[opp]
-        
-        pieces_score = 0
-        
-        if (abs(my_x - my_o) > 4 and min(my_x, my_o) < 3): #a big difference in X and O pieces is a disadvantage
-            pieces_score -= C1
-        if (abs(opp_x - opp_o) > 4 and min(opp_x, opp_o) < 3): #if opp has a big difference in X and O pieces it is an advantage
-            pieces_score += C2
-        
-        if (my_x == 0 or my_o == 0): #no pieces of one type is a disadvantage
-            pieces_score -= D1
-        if (opp_x == 0 or opp_o == 0): #if opp has no pieces of one type it is an advantage
-            pieces_score += D2
-        
-        # ———————————
-        # 3. totem alignment [0;20] - number of new potential placements for totems
-        alignment_score = len(Game._totems_actions(state, 'X')) * E + len(Game._totems_actions(state, 'O')) * F
-        
-        return win_score + pieces_score + alignment_score
-    
+        return score
+
     def near_win_symbol(self, state):
         """
         Uses the logic of _last_piece_won to count the number of near wins with symbols
