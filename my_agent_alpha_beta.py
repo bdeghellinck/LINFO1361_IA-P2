@@ -31,6 +31,23 @@ class AlphaBetaAgent(Agent):
         self.max_depth = 5
 
     def act(self, state,remaining_time):
+        """
+        Choose and return an action for the current turn,
+        following the minimax algorithm with alpha-beta pruning. 
+        If time is running out, return a random legal action.
+
+        Parameters
+        ----------
+        state : State
+            The current game state.
+        remaining_time : float
+            Total seconds remaining on your clock for the rest of the game.
+
+        Returns
+        -------
+        best_action : tuple
+            The best action to play in the current state, or a random legal action if time is running out.
+        """
         _, best_action = self.max_value(state, self.max_depth, float('-inf'), float('inf'))
 
         if best_action is None or remaining_time <= 5:
@@ -39,6 +56,25 @@ class AlphaBetaAgent(Agent):
         return best_action
     
     def max_value(self, state, depth, alpha, beta):
+        """
+        Max-value function for minimax with alpha-beta pruning.
+
+        Parameters
+        ----------
+        state : State
+            The current game state.
+        depth : int
+            The maximum depth to search.
+        alpha : float
+            The alpha value for alpha-beta pruning.
+        beta : float
+            The beta value for alpha-beta pruning.
+
+        Returns
+        -------
+        max_v, best_action : int, tuple
+            The best action and its value to play in the current state, or a random legal action if time is running out.
+        """
         if depth == 0 or Game.is_terminal(state):
             if Game.is_terminal(state):
                 return Game.utility(state, self.player), None
@@ -63,6 +99,25 @@ class AlphaBetaAgent(Agent):
         return max_v, best_action
     
     def min_value(self, state, depth, alpha, beta):
+        """
+        Min-value function for minimax with alpha-beta pruning.
+
+        Parameters
+        ----------
+        state : State
+            The current game state.
+        depth : int
+            The maximum depth to search.
+        alpha : float
+            The alpha value for alpha-beta pruning.
+        beta : float
+            The beta value for alpha-beta pruning.
+
+        Returns
+        -------
+        min_v, best_action : int, tuple
+            The best action and its value to play in the current state, or a random legal action if time is running out.
+        """
         if depth == 0 or Game.is_terminal(state):
             if Game.is_terminal(state):
                 return Game.utility(state, self.player), None
@@ -88,20 +143,32 @@ class AlphaBetaAgent(Agent):
     
     def evaluate(self, state):
         """
-        Heuristic evaluation function
-        """
-        A1, A2 = 0.45, 0.35
-        C1, C2 = 0.05, 0.05
-        D1, D2 = 0.10, 0.20
-        E, F = 0.05, 0.05
+        Heuristic evaluation function for alpha-beta pruning.
 
+        Parameters
+        ----------
+        state : State
+            The current game state.
+
+        Returns
+        -------
+        scores sum : int
+            The score for the current state.
+        """
         opp = 1 - self.player
         
-        # 1. Winning potential / threats [~ <5] - number of near wins (3 in a row)
+        # Weights for the different criteria of the evaluation function
+        A1, A2 = 0.45, 0.35 # 1. Winning potential / threats
+        C1, C2 = 0.05, 0.05 # 2.1 big difference in X and 0 pieces
+        D1, D2 = 0.10, 0.20 # 2.2 no pieces of one type
+        E , F  = 0.05, 0.05 # 3. Totem alignment
+        
+        # ———————————
+        # 1. Winning potential / threats [~ <5] - number of near wins (3 in a row with an open spot)
         my_win = self.near_win_color(state, self.player)
         opp_win = self.near_win_color(state, opp)
-        sym_win = self.near_win_symbol(state)
         
+        sym_win = self.near_win_symbol(state) #if it's the agent's turn, the symbol near wins are an opportunity, otherwise they are a threat
         if (state.current_player == self.player):
             my_win += sym_win
         else:
@@ -109,6 +176,7 @@ class AlphaBetaAgent(Agent):
             
         win_score = my_win * A1 - opp_win * A2
         
+        # ———————————
         # 2. number of remaining pieces [0; 16]
         my_x = state.pieces_x[self.player]
         my_o = state.pieces_o[self.player]
@@ -117,16 +185,17 @@ class AlphaBetaAgent(Agent):
         
         pieces_score = 0
         
-        if (abs(my_x - my_o) > 4 and min(my_x, my_o) < 3):
+        if (abs(my_x - my_o) > 4 and min(my_x, my_o) < 3): #a big difference in X and O pieces is a disadvantage
             pieces_score -= C1
-        if (abs(opp_x - opp_o) > 4 and min(opp_x, opp_o) < 3):
+        if (abs(opp_x - opp_o) > 4 and min(opp_x, opp_o) < 3): #if opp has a big difference in X and O pieces it is an advantage
             pieces_score += C2
         
-        if (my_x == 0 or my_o == 0):
+        if (my_x == 0 or my_o == 0): #no pieces of one type is a disadvantage
             pieces_score -= D1
-        if (opp_x == 0 or opp_o == 0):
+        if (opp_x == 0 or opp_o == 0): #if opp has no pieces of one type it is an advantage
             pieces_score += D2
         
+        # ———————————
         # 3. totem alignment [0;20] - number of new potential placements for totems
         alignment_score = len(Game._totems_actions(state, 'X')) * E + len(Game._totems_actions(state, 'O')) * F
         
@@ -134,7 +203,18 @@ class AlphaBetaAgent(Agent):
     
     def near_win_symbol(self, state):
         """
-        Uses the logic of _last_piece_won to check if the board has 3 symbols in a row and an open spot for the 4th
+        Uses the logic of _last_piece_won to count the number of near wins with symbols
+        so "+1" if the board has 3 symbols in a row (or XX_X) and an open spot for the 4th
+        
+        Parameters
+        ----------
+        state : State
+            The current game state.
+
+        Returns
+        -------
+        score : int
+            The number of near wins with symbols for the current state.
         """
         board = state.board
         score = 0
@@ -200,7 +280,20 @@ class AlphaBetaAgent(Agent):
     
     def near_win_color(self, state, player):
         """
-        Uses the logic of _last_piece_won to check if the player has 3 color in a row and an open spot for the 4th
+        Uses the logic of _last_piece_won to count the number of near wins by color for the given player,
+        so "+1" if the board has 3 pieces of the same color in a row (or XX_X) and an open spot for the 4th
+        
+        Parameters
+        ----------
+        state : State
+            The current game state.
+        player : str
+            The player for whom to count near wins.
+
+        Returns
+        -------
+        score : int
+            The number of near wins by color for the given player in the current state.
         """
         board = state.board
         score = 0
