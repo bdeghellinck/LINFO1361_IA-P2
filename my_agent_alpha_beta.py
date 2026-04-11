@@ -7,12 +7,12 @@ import random
 class AlphaBetaAgent(Agent):
     def __init__(self, player):
         super().__init__(player)
-        self.max_depth = 5
+        self.max_depth = 15
 
     def act(self, state,remaining_time):
         """
         Choose and return an action for the current turn,
-        following the minimax algorithm with alpha-beta pruning. 
+        following the minimax algorithm with alpha-beta pruning and iterative deepening. 
         If time is running out, return a random legal action.
 
         Parameters
@@ -27,7 +27,7 @@ class AlphaBetaAgent(Agent):
         best_action : tuple
             The best action to play in the current state, or a random legal action if time is running out.
         """
-        if remaining_time <= 5:
+        if remaining_time <= 1.0:
             return random.choice(list(Game.actions(state)))
         
         # best first move when starting as player 0
@@ -41,12 +41,18 @@ class AlphaBetaAgent(Agent):
         time_limit = remaining_time* (1 - decay**(-1))/ (1 - decay**(-nrem))
         deadline = time.time() + time_limit
         
-        _, best_action = self.max_value(state, self.max_depth, float('-inf'), float('inf'), deadline)
-
-        if best_action is None: #time ran out during the search
-            return random.choice(list(Game.actions(state)))
+        final_best_action = random.choice(list(Game.actions(state))) 
         
-        return best_action
+        for current_depth in range(1, self.max_depth + 1):
+            _, best_action = self.max_value(state, current_depth, float('-inf'), float('inf'), deadline)
+            
+            # if timeout during this depth, break and return best_action from previous depth
+            if time.time() >= deadline or best_action is None:
+                break 
+            
+            final_best_action = best_action
+        
+        return final_best_action
     
     def max_value(self, state, depth, alpha, beta, deadline):
         """
@@ -184,7 +190,7 @@ class AlphaBetaAgent(Agent):
         A1, A2 = 0.45, 0.35 # 1. Winning potential / threats
         C1, C2 = 0.05, 0.05 # 2.1 big difference in X and 0 pieces
         D1, D2 = 0.10, 0.20 # 2.2 no pieces of one type
-        E , F  = 0.05, 0.05 # 3. Totem alignment
+        E      = 0.05       # 3. Totem alignment
         
         # ———————————
         # 1. Winning potential / threats [~ <5] - number of near wins (3 in a row with an open spot)
@@ -220,7 +226,7 @@ class AlphaBetaAgent(Agent):
         
         # ———————————
         # 3. totem alignment [0;20] - number of new potential placements for totems
-        alignment_score = len(Game._totems_actions(state, 'X')) * E + len(Game._totems_actions(state, 'O')) * F
+        alignment_score = (len(Game._totems_actions(state, 'X')) + len(Game._totems_actions(state, 'O'))) * E
         
         return win_score + pieces_score + alignment_score
     
