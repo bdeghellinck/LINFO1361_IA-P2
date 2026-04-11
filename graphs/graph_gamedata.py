@@ -48,7 +48,7 @@ plt.ylim(0, 100)
 plt.legend(loc='upper left')
 plt.grid(axis='y', linestyle='--', alpha=0.5)
 plt.tight_layout()
-plt.savefig('graph1_victoires.png', dpi=300)
+plt.savefig('graphs/graph1_evolution-ab_win.png', dpi=300)
 
 # ==========================================
 # GRAPHIQUE 2 & 3 : Temps de jeu et temps par tour moyen
