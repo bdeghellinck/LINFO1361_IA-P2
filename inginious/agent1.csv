@@ -1,0 +1,13 @@
+section,agent,opponent,game_number,role,num_moves,my_num_moves,opp_num_moves,my_total_time,opp_total_time,game_total_time,my_avg_turn,opp_avg_turn,my_max_turn,opp_max_turn,my_last_remaining,opp_last_remaining,result,timeout,num_games,win_rate_total,win_rate_as_pink,win_rate_as_black,avg_game_time,avg_my_time,avg_opp_time,avg_my_turn_summary,avg_opp_turn_summary,avg_my_moves,avg_opp_moves,my_timeouts,opp_timeouts,best_win_streak
+per_game,Agent 1,Inginious,0,pink,18,9,9,0.8911,46.1266,47.0177,0.099,5.1252,0.2042,5.4283,299.1089,253.8734,loss,False,,,,,,,,,,,,,,
+per_game,Agent 1,Inginious,1,pink,20,10,10,0.5368,51.8471,52.3839,0.0537,5.1847,0.1895,5.6012,299.4632,248.1529,loss,False,,,,,,,,,,,,,,
+per_game,Agent 1,Inginious,2,pink,14,7,7,0.3053,35.3779,35.6832,0.0436,5.054,0.1901,5.3752,299.6947,264.6221,loss,False,,,,,,,,,,,,,,
+per_game,Agent 1,Inginious,3,pink,23,12,11,0.7897,55.9076,56.6973,0.0658,5.0825,0.1913,5.5279,299.2103,244.0924,win,False,,,,,,,,,,,,,,
+per_game,Agent 1,Inginious,4,pink,21,11,10,0.4284,51.3031,51.7315,0.0389,5.1303,0.1901,5.5026,299.5716,248.6969,win,False,,,,,,,,,,,,,,
+per_game,Agent 1,Inginious,5,black,17,8,9,0.8196,47.2981,48.1177,0.1024,5.2553,0.2093,5.6021,299.1804,252.7019,loss,False,,,,,,,,,,,,,,
+per_game,Agent 1,Inginious,6,black,15,7,8,0.3364,40.3268,40.6632,0.0481,5.0409,0.1051,5.2966,299.6636,259.6732,loss,False,,,,,,,,,,,,,,
+per_game,Agent 1,Inginious,7,black,17,8,9,0.3944,46.3176,46.712,0.0493,5.1464,0.1043,5.5374,299.6056,253.6824,loss,False,,,,,,,,,,,,,,
+per_game,Agent 1,Inginious,8,black,16,8,8,0.5283,41.3882,41.9165,0.066,5.1735,0.1394,5.5853,299.4717,258.6118,win,False,,,,,,,,,,,,,,
+per_game,Agent 1,Inginious,9,black,15,7,8,0.5156,40.7196,41.2352,0.0737,5.09,0.2309,5.446,299.4844,259.2804,loss,False,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+summary,Agent 1,Inginious,,,,,,,,,,,,,,,,,10,0.3,0.4,0.2,46.2158,0.5545,45.6613,0.0637,5.1305,8.7,8.9,0,0,2

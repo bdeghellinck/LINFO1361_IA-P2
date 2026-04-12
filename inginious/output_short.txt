@@ -1,0 +1,205 @@
+((venv) ) (base) thelma@Mac LINFO1361_IA-P2 % python log_analysis.py inginious/agent1.txt
+
+═════════════════════════════════════════════════════════════
+  GAME LOG ANALYSIS  —  10 game(s)  —  Agent 1 vs Inginious
+═════════════════════════════════════════════════════════════
+
+TIMING
+─────────────────────────────────────────────────────────────
+  Avg game duration  (all)  :    46.22 s
+  Avg game duration  (me)   :     0.55 s
+  Avg game duration  (opp)  :    45.66 s
+  Avg turn time      (me)   :     0.06 s
+  Avg turn time      (opp)  :     5.13 s
+  Longest turn       (me)   :     0.23 s
+  Shortest turn      (me)   :     0.00 s
+
+RESULTS
+─────────────────────────────────────────────────────────────
+  Total wins         :   3 / 10   (30.0%)
+  Wins as 1st (pink) :   2 / 5    (40.0%)
+  Wins as 2nd (black):   1 / 5    (20.0%)
+  Best win streak    : 2
+
+MOVES
+─────────────────────────────────────────────────────────────
+  Avg moves per game  (all)  :     17.6
+  Avg moves per game  (me)   :      8.7
+  Avg moves per game  (opp)  :      8.9
+
+TIMEOUTS
+─────────────────────────────────────────────────────────────
+  Timouts  (me)   : 0
+  Timouts  (opp)  : 0
+
+((venv) ) (base) thelma@Mac LINFO1361_IA-P2 % python log_analysis.py inginious/agent2.txt
+
+═════════════════════════════════════════════════════════════
+  GAME LOG ANALYSIS  —  20 game(s)  —  Agent 2 vs Inginious
+═════════════════════════════════════════════════════════════
+
+TIMING
+─────────────────────────────────────────────────────────────
+  Avg game duration  (all)  :    87.62 s
+  Avg game duration  (me)   :    49.57 s
+  Avg game duration  (opp)  :    38.05 s
+  Avg turn time      (me)   :     6.52 s
+  Avg turn time      (opp)  :     5.11 s
+  Longest turn       (me)   :    35.36 s
+  Shortest turn      (me)   :     0.00 s
+
+RESULTS
+─────────────────────────────────────────────────────────────
+  Total wins         :  13 / 20   (65.0%)
+  Wins as 1st (pink) :   6 / 10   (60.0%)
+  Wins as 2nd (black):   7 / 10   (70.0%)
+  Best win streak    : 5
+
+MOVES
+─────────────────────────────────────────────────────────────
+  Avg moves per game  (all)  :     15.1
+  Avg moves per game  (me)   :      7.6
+  Avg moves per game  (opp)  :      7.5
+
+TIMEOUTS
+─────────────────────────────────────────────────────────────
+  Timouts  (me)   : 0
+  Timouts  (opp)  : 0
+
+((venv) ) (base) thelma@Mac LINFO1361_IA-P2 % python log_analysis.py inginious/agent4.txt
+
+═════════════════════════════════════════════════════════════
+  GAME LOG ANALYSIS  —  10 game(s)  —  Agent 4 vs Inginious
+═════════════════════════════════════════════════════════════
+
+TIMING
+─────────────────────────────────────────────────────────────
+  Avg game duration  (all)  :    73.08 s
+  Avg game duration  (me)   :    34.22 s
+  Avg game duration  (opp)  :    38.87 s
+  Avg turn time      (me)   :     4.75 s
+  Avg turn time      (opp)  :     5.25 s
+  Longest turn       (me)   :    10.00 s
+  Shortest turn      (me)   :     0.01 s
+
+RESULTS
+─────────────────────────────────────────────────────────────
+  Total wins         :   3 / 10   (30.0%)
+  Wins as 1st (pink) :   1 / 5    (20.0%)
+  Wins as 2nd (black):   2 / 5    (40.0%)
+  Best win streak    : 1
+
+MOVES
+─────────────────────────────────────────────────────────────
+  Avg moves per game  (all)  :     14.6
+  Avg moves per game  (me)   :      7.2
+  Avg moves per game  (opp)  :      7.4
+
+TIMEOUTS
+─────────────────────────────────────────────────────────────
+  Timouts  (me)   : 0
+  Timouts  (opp)  : 0
+
+((venv) ) (base) thelma@Mac LINFO1361_IA-P2 % python log_analysis.py inginious/agent6.txt
+
+═════════════════════════════════════════════════════════════
+  GAME LOG ANALYSIS  —  20 game(s)  —  Agent 6 vs Inginious
+═════════════════════════════════════════════════════════════
+
+TIMING
+─────────────────────────────────────────────────────────────
+  Avg game duration  (all)  :   102.07 s
+  Avg game duration  (me)   :    57.31 s
+  Avg game duration  (opp)  :    44.76 s
+  Avg turn time      (me)   :     6.44 s
+  Avg turn time      (opp)  :     5.17 s
+  Longest turn       (me)   :    43.32 s
+  Shortest turn      (me)   :     0.02 s
+
+RESULTS
+─────────────────────────────────────────────────────────────
+  Total wins         :  15 / 20   (75.0%)
+  Wins as 1st (pink) :   8 / 10   (80.0%)
+  Wins as 2nd (black):   7 / 10   (70.0%)
+  Best win streak    : 8
+
+MOVES
+─────────────────────────────────────────────────────────────
+  Avg moves per game  (all)  :     17.6
+  Avg moves per game  (me)   :      8.9
+  Avg moves per game  (opp)  :      8.7
+
+TIMEOUTS
+─────────────────────────────────────────────────────────────
+  Timouts  (me)   : 0
+  Timouts  (opp)  : 0
+
+((venv) ) (base) thelma@Mac LINFO1361_IA-P2 % python log_analysis.py inginious/agent7.txt
+
+═════════════════════════════════════════════════════════════
+  GAME LOG ANALYSIS  —  20 game(s)  —  Agent 7 vs Inginious
+═════════════════════════════════════════════════════════════
+
+TIMING
+─────────────────────────────────────────────────────────────
+  Avg game duration  (all)  :   335.48 s
+  Avg game duration  (me)   :   288.05 s
+  Avg game duration  (opp)  :    47.43 s
+  Avg turn time      (me)   :    31.48 s
+  Avg turn time      (opp)  :     5.18 s
+  Longest turn       (me)   :   100.10 s
+  Shortest turn      (me)   :     0.00 s
+
+RESULTS
+─────────────────────────────────────────────────────────────
+  Total wins         :  10 / 20   (50.0%)
+  Wins as 1st (pink) :   7 / 10   (70.0%)
+  Wins as 2nd (black):   3 / 10   (30.0%)
+  Best win streak    : 4
+
+MOVES
+─────────────────────────────────────────────────────────────
+  Avg moves per game  (all)  :     18.3
+  Avg moves per game  (me)   :      9.2
+  Avg moves per game  (opp)  :      9.2
+
+TIMEOUTS
+─────────────────────────────────────────────────────────────
+  Timouts  (me)   : 0
+  Timouts  (opp)  : 0
+
+((venv) ) (base) thelma@Mac LINFO1361_IA-P2 % python log_analysis.py inginious/agent8.txt
+
+═════════════════════════════════════════════════════════════
+  GAME LOG ANALYSIS  —  20 game(s)  —  Agent 8 vs Inginious
+═════════════════════════════════════════════════════════════
+
+TIMING
+─────────────────────────────────────────────────────────────
+  Avg game duration  (all)  :   325.26 s
+  Avg game duration  (me)   :   282.66 s
+  Avg game duration  (opp)  :    42.60 s
+  Avg turn time      (me)   :    33.65 s
+  Avg turn time      (opp)  :     5.07 s
+  Longest turn       (me)   :   100.15 s
+  Shortest turn      (me)   :     0.00 s
+
+RESULTS
+─────────────────────────────────────────────────────────────
+  Total wins         :  10 / 20   (50.0%)
+  Wins as 1st (pink) :   5 / 10   (50.0%)
+  Wins as 2nd (black):   5 / 10   (50.0%)
+  Best win streak    : 5
+
+MOVES
+─────────────────────────────────────────────────────────────
+  Avg moves per game  (all)  :     16.8
+  Avg moves per game  (me)   :      8.4
+  Avg moves per game  (opp)  :      8.4
+
+TIMEOUTS
+─────────────────────────────────────────────────────────────
+  Timouts  (me)   : 0
+  Timouts  (opp)  : 0
+
+((venv) ) (base) thelma@Mac LINFO1361_IA-P2 %                                            
