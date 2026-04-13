@@ -1,7 +1,7 @@
 """
-compare_agents.py  <folder_with_csvs>
+graph_logdata.py  <folder_with_csvs>
 
-Reads all *.csv files produced by analyze_logs.py from the given folder.
+Reads all *.csv files produced by logdata.py from the given folder.
 Saves 4 individual graphs in a graphs/ subfolder.
 
 Graphs:
@@ -60,6 +60,24 @@ ORANGE = "#ff7f0e"
 
 def apply_style(ax, x, labels):
     ax.set_xticks(x)
+    for i in range(len(labels)):
+        if labels[i] == 'Agent 1':
+            labels[i] = "v1:\nPremier essai"
+        elif labels[i] == "Agent 2":
+            labels[i] = "v2:\nModif sym_win"
+        elif labels[i] == "Agent 4":
+            labels[i] = "v3:\nGestion du temps"
+        elif labels[i] == "Agent 6":
+            labels[i] = "v4:\nGestion du temps 2"
+        elif labels[i] == "Agent 7":
+            labels[i] = "v5:\nIterative deepening"
+        elif labels[i] == "Agent 8":
+            labels[i] = "v6:\nCoup d'entrée"
+        elif labels[i] == "Agent 9":
+            labels[i] = "v7:\nv4 + coup d'entrée"
+        else:
+            pass
+
     ax.set_xticklabels(labels, rotation=45, ha="right", fontsize=10)
     ax.grid(axis="y", linestyle="--", alpha=0.5)
 
@@ -72,7 +90,7 @@ def graph1_win_rate(data, out_dir, opponent):
     wr_pink    = [f(d[1]["win_rate_as_pink"])   * 100 for d in data]
     wr_black   = [f(d[1]["win_rate_as_black"])  * 100 for d in data]
     x = np.arange(len(agents))
-
+    
     fig, ax = plt.subplots(figsize=(10, 7))
 
     ax.plot(x, wr_total, marker="o", color=BLUE,  linewidth=2, markersize=8,
@@ -123,7 +141,7 @@ def graph2_avg_game_time(data, out_dir, opponent):
     ax.set_title(f"Temps moyen de jeu contre l'agent {opponent}", fontsize=14, pad=15)
     ax.set_ylabel("Temps moyen (s)", fontsize=12)
     ax.set_ylim(0, max(max(avg_my_time), max(avg_opp_time)) * 1.25 + 1)
-    ax.axhline(y=300, color='r', linestyle='--', label="Limite de temps (300s)", linewidth=0.7, zorder=0)
+    ax.axhline(y=300, color='r', linestyle='--', label="Limite de temps (300s)", linewidth=1, zorder=0)
     #ax.text(0, 300, "Limite de temps (300s)", color='red', va='bottom', fontsize=9)
     ax.legend(loc="upper left")
     apply_style(ax, x, agents)
@@ -139,7 +157,7 @@ def graph3_avg_turn_time(data, out_dir, opponent):
     avg_my_turn = [f(d[1]["avg_my_turn_summary"]) for d in data]
     avg_opp_turn = [f(d[1]["avg_opp_turn_summary"]) for d in data]
     x = np.arange(len(agents))
-
+    
     fig, ax = plt.subplots(figsize=(10, 7))
 
     ax.plot(x, avg_my_turn, marker="s", color=BLUE, linewidth=2, markersize=5, label="Mon tour")
@@ -165,7 +183,7 @@ def graph4_avg_moves(data, out_dir, opponent):
     agents   = [d[0] for d in data]
     avg_moves = [f(d[1]["avg_my_moves"]) for d in data]
     x = np.arange(len(agents))
-
+    
     fig, ax = plt.subplots(figsize=(10, 7))
 
     ax.plot(x, avg_moves, marker="s", color=BLUE, linewidth=2, markersize=5)
@@ -189,7 +207,7 @@ def graph4_avg_moves(data, out_dir, opponent):
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
-        print("Usage: python compare_agents.py <folder_with_csvs>")
+        print("Usage: python graphs/graph_logdata.py <folder_with_csvs>")
         sys.exit(1)
 
     folder = Path(sys.argv[1])

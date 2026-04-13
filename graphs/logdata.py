@@ -1,5 +1,5 @@
 """
-analyze_logs.py  <path/to/combined_file.txt>
+logdata.py  <path/to/combined_file.txt>
 
 Parses a combined game-log file, prints a text report, and writes a CSV
 next to the input file (same stem, .csv extension).
@@ -22,12 +22,9 @@ MOVE_RE = re.compile(
     r"\s*\(\s*(\d+)\s*,\s*(\d+)\s*\)\s*\)\s*,\s*([\d.eE+\-]+)"
 )
 
-# Single unified fieldname list used for every row
 FIELDS = [
     "section",
-    # identifiers
     "agent", "opponent",
-    # per-game fields
     "game_number", "role",
     "num_moves", "my_num_moves", "opp_num_moves",
     "my_total_time", "opp_total_time", "game_total_time",
@@ -35,7 +32,6 @@ FIELDS = [
     "my_max_turn", "opp_max_turn",
     "my_last_remaining", "opp_last_remaining",
     "result", "timeout",
-    # summary-only fields
     "num_games",
     "win_rate_total", "win_rate_as_pink", "win_rate_as_black",
     "avg_game_time", "avg_my_time", "avg_opp_time",
@@ -71,10 +67,17 @@ def parse_combined_file(filepath):
         except ValueError:
             continue
 
-        i_go_first = game_number < 5
+        # Line after max_time: "pink" or "black" if present, else fall back to game_number
+        role_line = block[1].lower().strip() if len(block) > 1 else ""
+        if "pink" in role_line or "black" in role_line:
+            i_go_first = "pink" in role_line
+            move_start = 2
+        else:
+            i_go_first = game_number < 5
+            move_start = 1
 
         moves = []
-        for line in block[2:]:
+        for line in block[move_start:]:
             m = MOVE_RE.match(line)
             if m:
                 moves.append({
@@ -203,26 +206,26 @@ def write_csv(games, filepath):
             }
             writer.writerow(row)
 
-        writer.writerow(empty)  # blank separator
+        writer.writerow(empty)
 
         writer.writerow({**empty,
-            "section":           "summary",
-            "agent":             agent,
-            "opponent":          opponent,
-            "num_games":         n,
-            "win_rate_total":    round(wins_total  / n,               4) if n           else 0,
-            "win_rate_as_pink":  round(wins_first  / len(first_g),    4) if first_g     else "",
-            "win_rate_as_black": round(wins_second / len(second_g),   4) if second_g    else "",
-            "avg_game_time":     round(sum(g["game_total"] for g in games) / n, 4),
-            "avg_my_time":       round(sum(g["my_total"]   for g in games) / n, 4),
-            "avg_opp_time":      round(sum(g["opp_total"]  for g in games) / n, 4),
+            "section":              "summary",
+            "agent":                agent,
+            "opponent":             opponent,
+            "num_games":            n,
+            "win_rate_total":       round(wins_total  / n,               4) if n         else 0,
+            "win_rate_as_pink":     round(wins_first  / len(first_g),    4) if first_g   else "",
+            "win_rate_as_black":    round(wins_second / len(second_g),   4) if second_g  else "",
+            "avg_game_time":        round(sum(g["game_total"] for g in games) / n, 4),
+            "avg_my_time":          round(sum(g["my_total"]   for g in games) / n, 4),
+            "avg_opp_time":         round(sum(g["opp_total"]  for g in games) / n, 4),
             "avg_my_turn_summary":  round(sum(all_my)  / len(all_my),  4) if all_my  else 0,
             "avg_opp_turn_summary": round(sum(all_opp) / len(all_opp), 4) if all_opp else 0,
-            "avg_my_moves":      round(sum(g["my_num_moves"]  for g in games) / n, 2),
-            "avg_opp_moves":     round(sum(g["opp_num_moves"] for g in games) / n, 2),
-            "my_timeouts":       sum(1 for g in games if g["timeout"] and not g["i_won"]),
-            "opp_timeouts":      sum(1 for g in games if g["timeout"] and     g["i_won"]),
-            "best_win_streak":   streak,
+            "avg_my_moves":         round(sum(g["my_num_moves"]  for g in games) / n, 2),
+            "avg_opp_moves":        round(sum(g["opp_num_moves"] for g in games) / n, 2),
+            "my_timeouts":          sum(1 for g in games if g["timeout"] and not g["i_won"]),
+            "opp_timeouts":         sum(1 for g in games if g["timeout"] and     g["i_won"]),
+            "best_win_streak":      streak,
         })
 
     print(f"  CSV written -> {csv_path}")
@@ -319,7 +322,7 @@ def print_report(games, filepath=""):
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
-        print("Usage: python analyze_logs.py <path_to_combined_file.txt>")
+        print("Usage: python graphs/logdata.py <path_to_combined_file.txt>")
         sys.exit(1)
     fp = sys.argv[1]
     games = parse_combined_file(fp)
