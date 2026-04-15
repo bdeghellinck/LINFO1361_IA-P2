@@ -91,7 +91,6 @@ def proba_action(state, action, cur_player):
     Donne des points pour une action en fonction du résultat
     Plus une action est bonne, plus elle a de points
 
-
     Returns
     -------
     int
@@ -106,7 +105,7 @@ def proba_action(state, action, cur_player):
 
     points = 2 * couleur_joueur
 
-    if symbol >= 3:
+    if symbol >= 2:
         points -= 1 * symbol
 
     return points  
@@ -262,7 +261,7 @@ class My_MCTS_Agent(Agent):
             return ('X', (1, 3), (2, 3))
 
         #Calcul du temps pour le tour
-        alpha = 2 #Base de décroisante(plus c'est grand, plus ca décroit vite)
+        alpha = 1.5 #Base de décroisante(plus c'est grand, plus ca décroit vite)
         k = self.moves_done 
         Nrem = max(17 - k,1) #Nombre de coup encore possible (36 cases donc 18 coups total possible par joueur)
         temps_du_tour = remaining_time * (1 - alpha**(-1)) / (1 - alpha**(-Nrem))
