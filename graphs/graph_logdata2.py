@@ -71,7 +71,7 @@ def apply_style(ax, x, labels):
             labels[i] = "Greedy Agent"
         else:
             pass
-    ax.set_xticklabels(labels, rotation=45, ha="right", fontsize=10)
+    ax.set_xticklabels(labels, fontsize=10)
     ax.grid(axis="y", linestyle="--", alpha=0.5)
 
 
@@ -212,6 +212,14 @@ if __name__ == "__main__":
 
     # All CSVs in the folder are against the same opponent — take from first entry
     opponent = data[0][1]["opponent"]
+    if opponent == "Agent 9":
+        opponent = "Agent Alpha-Beta v7"
+    elif opponent == "Agent 6":
+        opponent = "Agent Alpha-Beta v4"
+    elif opponent == "Agent 8":
+        opponent = "Agent Alpha-Beta v6"
+    else:
+        pass
 
     print(f"  Loaded {len(data)} CSV(s) — opponent: {opponent}")
     print(f"  Agents: {', '.join(d[0] for d in data)}")

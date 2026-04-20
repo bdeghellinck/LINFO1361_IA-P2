@@ -78,7 +78,7 @@ def apply_style(ax, x, labels):
         else:
             pass
 
-    ax.set_xticklabels(labels, rotation=45, ha="right", fontsize=10)
+    ax.set_xticklabels(labels, fontsize=10)
     ax.grid(axis="y", linestyle="--", alpha=0.5)
 
 
@@ -103,11 +103,11 @@ def graph1_win_rate(data, out_dir, opponent):
     for i, v in enumerate(wr_total):
         ax.annotate(f"{v:.0f}%", (x[i], v),
                     textcoords="offset points", xytext=(0, 10),
-                    ha="center", color=BLUE, fontsize=10, bbox=dict(boxstyle="round,pad=0.2", fc="white", alpha=0.5, edgecolor=BLUE))
+                    ha="center", color=BLUE, fontsize=10, bbox=dict(boxstyle="round,pad=0.2", fc="white", alpha=0.7, edgecolor=BLUE))
 
     ax.set_title(f"Taux de victoires (%) contre l'agent {opponent}", fontsize=14, pad=15)
     ax.set_ylabel("Taux de victoire (%)", fontsize=12)
-    ax.set_ylim(0, 100)
+    ax.set_ylim(0, max(max(wr_total), max(wr_pink), max(wr_black)) * 1.25 + 1)
     ax.legend(loc="upper left")
     apply_style(ax, x, agents)
     fig.tight_layout()
@@ -136,7 +136,7 @@ def graph2_avg_game_time(data, out_dir, opponent):
     for i, v in enumerate(avg_my_time):
         ax.annotate(f"{v:.1f}s", (x[i], v),
                     textcoords="offset points", xytext=(0, 10), color=BLUE,
-                    ha="center", fontsize=10, bbox=dict(boxstyle="round,pad=0.2", fc="white", alpha=0.5, edgecolor=BLUE))
+                    ha="center", fontsize=10, bbox=dict(boxstyle="round,pad=0.2", fc="white", alpha=0.7, edgecolor=BLUE))
 
     ax.set_title(f"Temps moyen de jeu contre l'agent {opponent}", fontsize=14, pad=15)
     ax.set_ylabel("Temps moyen (s)", fontsize=12)
@@ -165,7 +165,7 @@ def graph3_avg_turn_time(data, out_dir, opponent):
     for i, v in enumerate(avg_my_turn):
         ax.annotate(f"{v:.2f}s", (x[i], v),
                     textcoords="offset points", xytext=(0, 10), color=BLUE,
-                    ha="center", fontsize=10, bbox=dict(boxstyle="round,pad=0.2", fc="white", alpha=0.5, edgecolor=BLUE))
+                    ha="center", fontsize=10, bbox=dict(boxstyle="round,pad=0.2", fc="white", alpha=0.7, edgecolor=BLUE))
 
     ax.set_title(f"Temps moyen par tour contre l'agent {opponent}", fontsize=14, pad=15)
     ax.set_ylabel("Temps par tour (s)", fontsize=12)
@@ -190,7 +190,7 @@ def graph4_avg_moves(data, out_dir, opponent):
     for i, v in enumerate(avg_moves):
         ax.annotate(f"{v:.1f}", (x[i], v),
                     textcoords="offset points", xytext=(0, 10), color=BLUE,
-                    ha="center", fontsize=10, bbox=dict(boxstyle="round,pad=0.2", fc="white", alpha=0.5, edgecolor=BLUE))
+                    ha="center", fontsize=10, bbox=dict(boxstyle="round,pad=0.2", fc="white", alpha=0.7, edgecolor=BLUE))
 
     ax.set_title(f"Nombre de coups moyen contre l'agent {opponent}", fontsize=14, pad=15)
     ax.set_ylabel("Nombre de coups", fontsize=12)
