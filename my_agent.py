@@ -2,7 +2,6 @@ from agent import Agent
 from oxono import Game, State
 
 import time
-import math
 import random
 
 class AlphaBetaAgent(Agent):
